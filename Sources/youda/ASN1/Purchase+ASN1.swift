@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import OpenSSL
 
 extension Purchase {
+
   init(
     reader: ASN1Reader,
     payloadLength: Int
@@ -62,4 +64,5 @@ extension Purchase {
       reader.updateLocation(sequence.length)
     }
   }
+
 }

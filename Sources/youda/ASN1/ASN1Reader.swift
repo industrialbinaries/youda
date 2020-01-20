@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OpenSSL
 
 final class ASN1Reader {
   var pointer: UnsafePointer<UInt8>!

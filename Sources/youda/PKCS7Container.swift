@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OpenSSL
 
 /// * The PKCS #7 container (the receipt) and the output of the verification. */
 // BIO *b_p7;

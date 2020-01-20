@@ -7,6 +7,7 @@
 
 import Foundation
 import StoreKit
+import OpenSSL
 
 /// * The Apple root certificate, as raw data and in its OpenSSL representation. */
 // BIO *b_x509;

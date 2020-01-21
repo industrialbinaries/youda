@@ -1,5 +1,5 @@
 //
-//  lola
+//  youda
 //
 //  Copyright (c) 2020 Industrial Binaries
 //  MIT license, see LICENSE file for details
@@ -9,7 +9,6 @@ import Foundation
 import OpenSSL
 
 extension Purchase {
-
   init(
     reader: ASN1Reader,
     payloadLength: Int
@@ -64,5 +63,4 @@ extension Purchase {
       reader.updateLocation(sequence.length)
     }
   }
-
 }

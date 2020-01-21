@@ -1,12 +1,12 @@
 //
-//  lola
+//  youda
 //
 //  Copyright (c) 2020 Industrial Binaries
 //  MIT license, see LICENSE file for details
 //
 
+import Foundation
 import StoreKit
-import UIKit
 
 public struct InAppProductId: Hashable {
   let identifier: String
@@ -26,11 +26,20 @@ final class InAppPurchases: NSObject {
 
   /// App In-App-Purchases products
   private let products: Set<InAppProductId>
+  /// Device ID for validate receipt hash
+  private let deviceID: UUID?
+
+  /// Remove service from payment queue, please call when your app is terminate `UIApplication.willTerminateNotification`
+  deinit {
+    SKPaymentQueue.default().remove(self)
+  }
 
   /// Initialize new InAppPurchases service
   /// - Parameter products: products for request from apple developer acount
-  init(products: Set<InAppProductId>) {
+  /// - Parameter deviceID: Device ID for validate receipt hash
+  public init(products: Set<InAppProductId>, deviceID: UUID?) {
     self.products = products
+    self.deviceID = deviceID
     super.init()
     // Add SKProductsRequestDelegate
     setupTransactionObserver()
@@ -118,7 +127,7 @@ extension InAppPurchases: SKPaymentTransactionObserver {
 
 private extension InAppPurchases {
   func loadReceipts() throws {
-    let receiptService = try ReceiptService()
+    let receiptService = try ReceiptService(deviceID: deviceID)
     let receipt = receiptService?.receipt
 
     for receipt in receipt?.purchases ?? [] {

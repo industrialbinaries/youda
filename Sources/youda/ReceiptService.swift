@@ -1,5 +1,5 @@
 //
-//  lola
+//  youda
 //
 //  Copyright (c) 2020 Industrial Binaries
 //  MIT license, see LICENSE file for details
@@ -7,14 +7,15 @@
 
 import CryptoKit
 import Foundation
-import UIKit
 
 final class ReceiptService {
   /// Local receipt
   let receipt: Receipt
+  /// Device ID - on iOS it is `UIDevice.current.identifierForVendor`
+  private let deviceID: UUID?
 
   /// Initialize new Receipt service and load current local `Receipt` from `pkcs7`
-  init?() throws {
+  init?(deviceID: UUID?) throws {
     guard let receiptASN1 = Data.receiptASN1 as NSData? else {
       return nil
     }
@@ -26,6 +27,7 @@ final class ReceiptService {
     }
 
     receipt = try Receipt(container: pkcs7)
+    self.deviceID = deviceID
   }
 
   /// Verify Receipt SHA1 hash
@@ -36,7 +38,7 @@ final class ReceiptService {
       let opaque = receipt.opaque,
       let bundleID = receipt.bundleIdRawData,
       let hash = receipt.hash,
-      var deviceID = UIDevice.current.identifierForVendor?.uuid else {
+      var deviceID = deviceID?.uuid else {
       throw ReceiptError.unverifiable
     }
     let deviceIDData = NSData(bytes: &deviceID, length: 16)

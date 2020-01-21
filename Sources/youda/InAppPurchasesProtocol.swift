@@ -1,5 +1,5 @@
 //
-//  lola
+//  youda
 //
 //  Copyright (c) 2020 Industrial Binaries
 //  MIT license, see LICENSE file for details
@@ -12,6 +12,11 @@ public protocol InAppPurchasesProtocol {
   var availableProducts: [SKProduct] { get }
   /// Purchased products
   var purchasedProducts: Set<InAppProductId> { get }
+
+  /// Initialize new InAppPurchases service
+  /// - Parameter products: products for request from apple developer acount
+  /// - Parameter deviceID: Device ID for validate receipt hash
+  init(products: Set<InAppProductId>, deviceID: UUID?)
 
   /// Try buy new `product`
   /// - Parameter product: new requested product

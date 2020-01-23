@@ -42,7 +42,8 @@ final class ASN1Reader {
       return nil
     }
 
-    let integer = c2i_ASN1_INTEGER(
+    // TODO: Work only with private `c2i_ASN1_INTEGER`
+    let integer = d2i_ASN1_INTEGER(
       nil,
       &pointer,
       object.length

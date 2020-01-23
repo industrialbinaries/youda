@@ -15,7 +15,10 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/IBM-Swift/OpenSSL", from: "2.2.2"),
+    .package(
+      url: "https://github.com/industrialbinaries/OpenSSL",
+      .branch("feature/asn1")
+    ),
   ],
   targets: [
     .target(

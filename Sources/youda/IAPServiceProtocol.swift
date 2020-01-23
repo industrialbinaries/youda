@@ -7,7 +7,7 @@
 
 import StoreKit
 
-public protocol InAppPurchasesProtocol {
+public protocol IAPServiceProtocol {
   /// Available products from apple developer
   var availableProducts: [SKProduct] { get }
   /// Purchased products

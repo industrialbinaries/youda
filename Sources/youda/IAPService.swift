@@ -18,13 +18,15 @@ extension Notification.Name {
   }
 }
 
-final class InAppPurchases: NSObject {
+public final class IAPService: NSObject {
   // MARK: - Public properties
 
   /// Available products from apple developer
-  private(set) var availableProducts = [SKProduct]()
+  public private(set) var availableProducts = [SKProduct]()
   /// Purchased products
-  private(set) var purchasedProducts = Set<InAppProductId>()
+  public private(set) var purchasedProducts = Set<InAppProductId>()
+  /// IAP delegate for inform about purchase updates
+  public weak var delegate: IAPServiceDelegate?
 
   // MARK: - Private properties
 
@@ -49,52 +51,47 @@ final class InAppPurchases: NSObject {
     setupTransactionObserver()
     // Request products
     requestProducts()
-    // Load receipts from bundle
+    // Load local receipts from bundle
     try? loadReceipts()
   }
 
   private func setupTransactionObserver() {
     SKPaymentQueue.default().add(self)
-    NotificationCenter.default.addObserver(
-      forName: UIApplication.willTerminateNotification,
-      object: nil,
-      queue: nil
-    ) { _ in
-      SKPaymentQueue.default().remove(self)
-    }
   }
 
   private func addPurchasedProduct(identifier: String) {
     purchasedProducts.insert(InAppProductId(identifier: identifier))
-    // inform about subscription change
+    // Send notification to inform about change purchased products
     NotificationCenter.default.post(name: .subscriptionChange, object: nil)
+    // Call delegate with new purchased products
+    delegate?.didUpdate(purchasedProducts: purchasedProducts)
   }
 }
 
 // MARK: - InAppPurchasesProtocol
 
-extension InAppPurchases: InAppPurchasesProtocol {
+extension IAPService: IAPServiceProtocol {
   /// Try buy new `product`
   /// - Parameter product: new requested product
-  func buy(product: SKProduct) {
+  public func buy(product: SKProduct) {
     let payment = SKPayment(product: product)
     SKPaymentQueue.default().add(payment)
   }
 
   /// Restore bought products, f.e. when you log in on new device or uninstall app
-  func restoreProducts() {
+  public func restoreProducts() {
     refreshReceipt()
   }
 }
 
 // MARK: - SKProductsRequestDelegate
 
-extension InAppPurchases: SKProductsRequestDelegate {
-  func productsRequest(_: SKProductsRequest, didReceive response: SKProductsResponse) {
+extension IAPService: SKProductsRequestDelegate {
+  public func productsRequest(_: SKProductsRequest, didReceive response: SKProductsResponse) {
     availableProducts = response.products
   }
 
-  func requestDidFinish(_ request: SKRequest) {
+  public func requestDidFinish(_ request: SKRequest) {
     guard request is SKReceiptRefreshRequest else { return }
     try? loadReceipts()
   }
@@ -109,8 +106,11 @@ extension InAppPurchases: SKProductsRequestDelegate {
 
 // MARK: - SKPaymentTransactionObserver
 
-extension InAppPurchases: SKPaymentTransactionObserver {
-  func paymentQueue(_: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+extension IAPService: SKPaymentTransactionObserver {
+  public func paymentQueue(
+    _: SKPaymentQueue,
+    updatedTransactions transactions: [SKPaymentTransaction]
+  ) {
     for transaction in transactions {
       switch transaction.transactionState {
       case .purchased, .restored:
@@ -129,7 +129,7 @@ extension InAppPurchases: SKPaymentTransactionObserver {
 
 // MARK: - Receipt helpers
 
-private extension InAppPurchases {
+private extension IAPService {
   func loadReceipts() throws {
     let receiptService = try ReceiptService(deviceID: deviceID)
     let receipt = receiptService?.receipt
@@ -143,7 +143,7 @@ private extension InAppPurchases {
     }
   }
 
-  /// Refresh user receipt, required user login
+  /// Refresh user receipt - required user login
   func refreshReceipt() {
     let request = SKReceiptRefreshRequest()
     request.delegate = self

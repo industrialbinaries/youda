@@ -11,18 +11,13 @@ public protocol IAPServiceProtocol {
   /// Available products from iTunesConnect, it is all products which you can buy from your app
   var availableProducts: [IAPProduct] { get }
   /// Purchased products
-  var purchasedProducts: Set<InAppProductId> { get }
+  var purchasedProducts: [IAPProduct] { get }
   /// IAP delegate for inform about purchase updates
   var delegate: IAPServiceDelegate? { get set }
 
-  /// Initialize new InAppPurchases service
-  /// - Parameter products: Products for request from apple developer acount
-  /// - Parameter deviceID: Device ID for validate receipt hash
-  init(products: Set<InAppProductId>, deviceID: UUID?)
-
   /// Try buy new `product`
-  /// - Parameter product: new requested product
-  func buy(product: SKProduct)
+  /// - Parameter product: Product identifier for purchase
+  func buy(product productIdentifier: String)
   /// Restore bought products, f.e. when you log in on new device or uninstall app
   func restoreProducts()
 }
@@ -41,15 +36,15 @@ extension IAPServiceProtocol {
   ///   - products: Products for request from apple developer acount
   ///   - deviceID: Device ID for validate receipt hash
   ///   - environment: Environment of instance
-  static func configureService(products: Set<InAppProductId>, deviceID: UUID?, environment: IAPEnvironment = .default) -> IAPServiceProtocol {
+  static func configureService(products: Set<String>, deviceID: UUID?, environment: IAPEnvironment = .default) -> IAPServiceProtocol {
     #if targetEnvironment(simulator)
-      return IAPServiceMock(products: products, deviceID: deviceID)
+      return IAPServiceMock()
     #else
       switch environment {
       case .default:
         return IAPService(products: products, deviceID: deviceID)
       case .mock:
-        return IAPServiceMock(products: products, deviceID: deviceID)
+        return IAPServiceMock()
       }
     #endif
   }

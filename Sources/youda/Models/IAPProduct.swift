@@ -9,21 +9,21 @@ import StoreKit
 
 public struct IAPProduct {
   /// The string that identifies the product to the Apple App Store.
-  let productIdentifier: String
+  public let productIdentifier: String
   /// The name of the product.
-  let title: String
+  public let title: String
   /// A description of the product.
-  let description: String
+  public let description: String
   /// The cost of the product formatted in the local currency.
-  let localPrice: String?
+  public let localPrice: String?
   /// The period off the subscription formatted in the local calendar/language.
-  let localSubscriptionPeriod: String?
+  public let localSubscriptionPeriod: String?
   /// Information about a product previously registered in App Store Connect. Can be nil in case you use `test` environment
-  let product: SKProduct?
+  public let product: SKProduct?
 
   /// Create `IAPProduct` from `SKProduct`
   /// - Parameter product: Product for initialize `IAPProduct`
-  init(with product: SKProduct) {
+  public init(with product: SKProduct) {
     self.product = product
     localPrice = product.localPrice
     localSubscriptionPeriod = product.subscriptionPeriod?.localPeriod
@@ -39,7 +39,7 @@ public struct IAPProduct {
   ///   - description: A description of the product.
   ///   - localPrice: The cost of the product formatted in the local currency.
   ///   - localSubscriptionPeriod: The period off the subscription formatted in the local calendar/language.
-  init(
+  public init(
     productIdentifier: String,
     title: String,
     description: String,

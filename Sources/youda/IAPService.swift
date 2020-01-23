@@ -10,7 +10,7 @@ import StoreKit
 
 extension Notification.Name {
   /// Notification trigged when update bought products
-  static var subscriptionChange: Notification.Name {
+  public static var subscriptionChange: Notification.Name {
     Notification.Name(rawValue: "co.industrial-binaries.youda.subscription-change")
   }
 }

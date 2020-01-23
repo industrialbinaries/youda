@@ -21,8 +21,8 @@ extension Notification.Name {
 public final class IAPService: NSObject {
   // MARK: - Public properties
 
-  /// Available products from apple developer
-  public private(set) var availableProducts = [SKProduct]()
+  /// Available products from iTunesConnect, it is all products which you can buy from your app
+  public private(set) var availableProducts = [IAPProduct]()
   /// Purchased products
   public private(set) var purchasedProducts = Set<InAppProductId>()
   /// IAP delegate for inform about purchase updates
@@ -88,7 +88,9 @@ extension IAPService: IAPServiceProtocol {
 
 extension IAPService: SKProductsRequestDelegate {
   public func productsRequest(_: SKProductsRequest, didReceive response: SKProductsResponse) {
-    availableProducts = response.products
+    availableProducts = response
+      .products
+      .map { IAPProduct(with: $0) }
   }
 
   public func requestDidFinish(_ request: SKRequest) {

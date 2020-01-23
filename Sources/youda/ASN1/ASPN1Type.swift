@@ -26,7 +26,7 @@ enum ASPN1Type: Int {
   case purchaseTransactionIdentifier = 1703
   case purchaseOriginalTransactionIdentifier = 1705
   case purchaseDate = 1704
-  case purchaseOriginalPurchaseDate = 1706
+  case originalPurchaseDate = 1706
   case purchaseSubscriptionExpirationDate = 1708
   case purchaseSubscriptionIntroductoryPricePeriod = 1719
   case purchaseCancellationDate = 1712

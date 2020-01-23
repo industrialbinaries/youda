@@ -30,7 +30,7 @@ struct Purchase {
   /// For a transaction that restores a previous transaction, the date of the original transaction.
   /// This value corresponds to the original transaction’s transactionDate property.
   ///  In an auto-renewable subscription receipt, this indicates the beginning of the subscription period, even if the subscription has been renewed.
-  var purchaseOriginalPurchaseDate: Date?
+  var originalPurchaseDate: Date?
   /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT.
   /// This key is only present for auto-renewable subscription receipts. Use this value to identify the date when the subscription will renew or expire, to determine if a customer should have access to content or service.
   /// After validating the latest receipt, if the subscription expiration date for the latest renewal transaction is a past date, it is safe to assume that the subscription has expired.

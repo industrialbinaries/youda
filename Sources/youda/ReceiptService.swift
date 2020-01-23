@@ -26,7 +26,12 @@ final class ReceiptService {
       throw ReceiptError.invalidCertificate
     }
 
-    receipt = try Receipt(container: pkcs7)
+    let sign = pkcs7.data?.pointee.d.sign
+    let octets = sign?.pointee.contents.pointee.d.data
+
+    let payloadASN1 = UnsafePointer(octets?.pointee.data)!
+    let reader = ASN1Reader(pointer: payloadASN1)
+    receipt = try reader.readReceipt(container: pkcs7)
     self.deviceID = deviceID
   }
 

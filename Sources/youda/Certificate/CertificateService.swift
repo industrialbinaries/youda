@@ -13,9 +13,11 @@ import StoreKit
 // BIO *b_x509;
 // X509 *Apple;
 struct CertificateService {
-  enum Certificate: String {
-		/// Apple Inc Root Certificate for verify Receipt from https://www.apple.com/certificateauthority/
-    case appleRoot = "AppleIncRootCertificate"
+  struct Certificate {
+    /// Name of certificate
+    let name: String
+    /// Apple Inc Root Certificate for verify Receipt from https://www.apple.com/certificateauthority/
+    static let appleRoot = Certificate(name: "AppleIncRootCertificate")
   }
 
   func verify(
@@ -41,7 +43,7 @@ struct CertificateService {
     /// * ... Load the Apple root certificate into b_X509 ... */
     guard
       let certificateURL = Bundle.main.url(
-        forResource: certificate.rawValue,
+        forResource: certificate.name,
         withExtension: "cer"
       ),
       let certificateData = try? Data(

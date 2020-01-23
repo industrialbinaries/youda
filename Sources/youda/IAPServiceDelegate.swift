@@ -11,5 +11,5 @@ import Foundation
 public protocol IAPServiceDelegate: class {
   /// Call when `IAPService` update `purchasedProducts`, this function call as many times as add new product
   /// - Parameter purchasedProducts: Set of current `purchasedProducts`
-  func didUpdate(purchasedProducts: Set<InAppProductId>)
+  func didUpdate(purchasedProducts: [IAPProduct])
 }

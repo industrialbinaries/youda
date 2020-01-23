@@ -8,11 +8,8 @@
 import Foundation
 import StoreKit
 
-public struct InAppProductId: Hashable {
-  let identifier: String
-}
-
 extension Notification.Name {
+  /// Notification trigged when update bought products
   static var subscriptionChange: Notification.Name {
     Notification.Name(rawValue: "co.industrial-binaries.youda.subscription-change")
   }
@@ -23,15 +20,21 @@ public final class IAPService: NSObject {
 
   /// Available products from iTunesConnect, it is all products which you can buy from your app
   public private(set) var availableProducts = [IAPProduct]()
-  /// Purchased products
-  public private(set) var purchasedProducts = Set<InAppProductId>()
+  /// Purchased products from available products
+  public var purchasedProducts: [IAPProduct] {
+    return availableProducts
+      .filter { purchasedProductsIdentifiers.contains($0.productIdentifier) }
+  }
+
   /// IAP delegate for inform about purchase updates
   public weak var delegate: IAPServiceDelegate?
 
   // MARK: - Private properties
 
-  /// App In-App-Purchases products
-  private let products: Set<InAppProductId>
+  /// Products for request from iTunesConnect
+  private let requestedProductIdentifiers: Set<String>
+  /// Purchased products identifiers
+  private var purchasedProductsIdentifiers = Set<String>()
   /// Device ID for validate receipt hash
   private let deviceID: UUID?
 
@@ -41,10 +44,11 @@ public final class IAPService: NSObject {
   }
 
   /// Initialize new InAppPurchases service
-  /// - Parameter products: products for request from apple developer acount
-  /// - Parameter deviceID: Device ID for validate receipt hash
-  public init(products: Set<InAppProductId>, deviceID: UUID?) {
-    self.products = products
+  /// - Parameters:
+  ///   - products: Products for request from iTunesConnect
+  ///   - deviceID: Device ID for validate receipt hash
+  public init(products: Set<String>, deviceID: UUID?) {
+    requestedProductIdentifiers = products
     self.deviceID = deviceID
     super.init()
     // Add SKProductsRequestDelegate
@@ -60,7 +64,7 @@ public final class IAPService: NSObject {
   }
 
   private func addPurchasedProduct(identifier: String) {
-    purchasedProducts.insert(InAppProductId(identifier: identifier))
+    purchasedProductsIdentifiers.insert(identifier)
     // Send notification to inform about change purchased products
     NotificationCenter.default.post(name: .subscriptionChange, object: nil)
     // Call delegate with new purchased products
@@ -72,8 +76,11 @@ public final class IAPService: NSObject {
 
 extension IAPService: IAPServiceProtocol {
   /// Try buy new `product`
-  /// - Parameter product: new requested product
-  public func buy(product: SKProduct) {
+  /// - Parameter product: Product identifier for purchase
+  public func buy(product productIdentifier: String) {
+    guard let product = availableProducts
+      .first(where: { $0.productIdentifier == productIdentifier })?
+      .product else { return }
     let payment = SKPayment(product: product)
     SKPaymentQueue.default().add(payment)
   }
@@ -99,8 +106,7 @@ extension IAPService: SKProductsRequestDelegate {
   }
 
   private func requestProducts() {
-    let identifiers = Set(products.map { $0.identifier })
-    let productsRequest = SKProductsRequest(productIdentifiers: identifiers)
+    let productsRequest = SKProductsRequest(productIdentifiers: requestedProductIdentifiers)
     productsRequest.delegate = self
     productsRequest.start()
   }

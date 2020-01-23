@@ -12,7 +12,11 @@ public struct InAppProductId: Hashable {
   let identifier: String
 }
 
-public let subscriptionChangeNotification: Notification.Name = Notification.Name(rawValue: "io.insdustrial-binaries.subscription-change")
+extension Notification.Name {
+  static var subscriptionChange: Notification.Name {
+    Notification.Name(rawValue: "co.industrial-binaries.youda.subscription-change")
+  }
+}
 
 final class InAppPurchases: NSObject {
   // MARK: - Public properties
@@ -63,7 +67,7 @@ final class InAppPurchases: NSObject {
   private func addPurchasedProduct(identifier: String) {
     purchasedProducts.insert(InAppProductId(identifier: identifier))
     // inform about subscription change
-    NotificationCenter.default.post(Notification(name: subscriptionChangeNotification))
+    NotificationCenter.default.post(name: .subscriptionChange, object: nil)
   }
 }
 

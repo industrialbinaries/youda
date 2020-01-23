@@ -9,9 +9,7 @@ import Foundation
 import OpenSSL
 
 extension ASN1Reader {
-  func readPurchase(
-    payloadLength: Int
-  ) throws -> Purchase {
+  func readPurchase(payloadLength: Int) throws -> Purchase {
     // Prepare Purchase properties
     var quantity: Int?
     var productIdentifier: String?

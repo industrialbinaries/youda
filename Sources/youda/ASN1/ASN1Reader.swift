@@ -36,17 +36,10 @@ final class ASN1Reader {
   }
 
   func readInteger(_ pointer: inout UnsafePointer<UInt8>?, with objectLength: Int) -> Int? {
-    let object = readNextObject(&pointer, with: objectLength)
-
-    guard object.type == V_ASN1_INTEGER else {
-      return nil
-    }
-
-    // TODO: Work only with private `c2i_ASN1_INTEGER`
     let integer = d2i_ASN1_INTEGER(
       nil,
       &pointer,
-      object.length
+      objectLength
     )
     let result = ASN1_INTEGER_get(integer)
     ASN1_INTEGER_free(integer)

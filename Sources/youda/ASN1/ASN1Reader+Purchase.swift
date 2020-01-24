@@ -5,10 +5,10 @@
 //  MIT license, see LICENSE file for details
 //
 
+import ASN1Decoder
 import Foundation
-import OpenSSL
 
-extension ASN1Reader {
+extension ASN1Decoder {
   func readPurchase(payloadLength: Int) throws -> Purchase {
     // Prepare Purchase properties
     var quantity: Int?
@@ -24,8 +24,8 @@ extension ASN1Reader {
 
     let endOfPayload = pointer.advanced(by: payloadLength)
 
-    let asn1Set = readNextObject(&pointer, with: payloadLength)
-    guard asn1Set.type == V_ASN1_SET else {
+    let asn1Set = readObject(&pointer, with: payloadLength)
+    guard asn1Set.type == ASN1Type.set.rawValue else {
       throw ReceiptError.invalidPurchase
     }
 
@@ -33,7 +33,7 @@ extension ASN1Reader {
     while pointer! < endOfPayload {
       let sequence = try readSequence(with: endOfPayload)
 
-      switch ASPN1Type(rawValue: sequence.type) {
+      switch ASN1Type(rawValue: sequence.type) {
       case .purchaseQuantity:
         var pointer = self.pointer
         quantity = readInteger(&pointer, with: sequence.length)

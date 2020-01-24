@@ -48,7 +48,7 @@ extension IAPServiceProtocol {
         return IAPService(products: products, deviceID: deviceID)
       #endif
     case let .mock(available: available, purchased: purchased):
-      return IAPServiceMock(availableProducts: available ?? [], purchasedProducts: purchased ?? [])
+      return IAPServiceMock(availableProducts: available, purchasedProducts: purchased)
     }
   }
 }

@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import StoreKit
 
 /// IAP Service delegate for IAP updates
 public protocol IAPServiceDelegate: class {
-  /// Call when `IAPService` update `purchasedProducts`, this function call as many times as add new product
+  /// Call when `SKProduct` update `purchasedProducts`, this function call as many times as add new product
   /// - Parameter purchasedProducts: Set of current `purchasedProducts`
-  func didUpdate(purchasedProducts: [IAPProduct])
+  func didUpdate(purchasedProducts: [SKProduct])
 }

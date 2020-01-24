@@ -11,9 +11,9 @@ public final class IAPServiceMock: IAPServiceProtocol {
   // MARK: - Public properties
 
   /// Available products from iTunesConnect, it is all products which you can buy from your app
-  public private(set) var availableProducts = [IAPProduct]()
+  public private(set) var availableProducts = [SKProduct]()
   /// Purchased products
-  public private(set) var purchasedProducts = [IAPProduct]()
+  public private(set) var purchasedProducts = [SKProduct]()
   /// IAP delegate for inform about purchase updates
   public weak var delegate: IAPServiceDelegate?
 
@@ -22,8 +22,8 @@ public final class IAPServiceMock: IAPServiceProtocol {
   ///   - availableProducts: Array of mock products which will be return when you try bought product
   ///   - purchasedProducts: Array of purchased products
   public init(
-    availableProducts: [IAPProduct] = [],
-    purchasedProducts: [IAPProduct] = []
+    availableProducts: [SKProduct] = [],
+    purchasedProducts: [SKProduct] = []
   ) {
     self.availableProducts = availableProducts
     self.purchasedProducts = purchasedProducts
@@ -40,13 +40,7 @@ public final class IAPServiceMock: IAPServiceProtocol {
       .first(where: { $0.productIdentifier == productIdentifier }) { // Is there prepared mock
       purchasedProducts.append(product)
     } else {
-      let product = IAPProduct(
-        productIdentifier: productIdentifier,
-        title: "Test product \(productIdentifier)",
-        description: "This is Youda test product description",
-        localPrice: "10,99 $",
-        localSubscriptionPeriod: nil
-      )
+      let product = SKProduct(productIdentifier: productIdentifier)
       purchasedProducts.append(product)
     }
 

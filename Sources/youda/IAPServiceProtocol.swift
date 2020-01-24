@@ -9,9 +9,9 @@ import StoreKit
 
 public protocol IAPServiceProtocol {
   /// Available products from iTunesConnect, it is all products which you can buy from your app
-  var availableProducts: [IAPProduct] { get }
+  var availableProducts: [SKProduct] { get }
   /// Purchased products
-  var purchasedProducts: [IAPProduct] { get }
+  var purchasedProducts: [SKProduct] { get }
   /// IAP delegate for inform about purchase updates
   var delegate: IAPServiceDelegate? { get set }
 
@@ -30,7 +30,7 @@ enum IAPEnvironment {
   /// - Parameters:
   ///   - availableProducts: Array of mock products which will be return when you try bought product, in case it is nil will return default "Test product"
   ///   - purchasedProducts: Array of purchased products
-  case mock(available: [IAPProduct]?, purchased: [IAPProduct]?)
+  case mock(available: [SKProduct], purchased: [SKProduct])
 }
 
 extension IAPServiceProtocol {

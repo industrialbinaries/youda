@@ -4,7 +4,7 @@
 ![Platforms: macOS](https://img.shields.io/badge/platforms-macOS-brightgreen.svg?style=flat)
 [![Twitter](https://img.shields.io/badge/twitter-@i_binaries-blue.svg?style=flat)](https://twitter.com/i_binaries)
 
-Library for help you with In-App-Purchase with your project
+A helper library for testing In-App purchases in your project
 
 ## Instalation
 

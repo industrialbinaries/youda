@@ -5,10 +5,10 @@
 //  MIT license, see LICENSE file for details
 //
 
+import ASN1Decoder
 import Foundation
-import OpenSSL
 
-extension ASN1Reader {
+extension ASN1Decoder {
   func readReceipt(
     container: PKCS7Container
   ) throws -> Receipt {
@@ -28,8 +28,8 @@ extension ASN1Reader {
     let octetsLenght = Int(octets?.pointee.length ?? 0)
 
     let endOfPayload = pointer.advanced(by: octetsLenght)
-    let asn1Set = readNextObject(&pointer, with: octetsLenght)
-    guard asn1Set.type == V_ASN1_SET else {
+    let asn1Set = readObject(&pointer, with: octetsLenght)
+    guard asn1Set.type == ASN1Type.set.rawValue else {
       throw ReceiptError.invalidReceipt
     }
 
@@ -37,7 +37,7 @@ extension ASN1Reader {
     while pointer < endOfPayload {
       let sequence = try readSequence(with: endOfPayload)
 
-      switch ASPN1Type(rawValue: sequence.type) {
+      switch ASN1Type(rawValue: sequence.type) {
       case .bundleId:
         var pointer = self.pointer
         bundleId = readString(&pointer, with: sequence.length)
@@ -54,8 +54,8 @@ extension ASN1Reader {
       case .createDate:
         var pointer = self.pointer
         creationDate = readDate(&pointer, length: sequence.length)
-      case .purchase:
-        let reader = ASN1Reader(pointer: pointer)
+      case .set:
+        let reader = ASN1Decoder(pointer: pointer)
         let purchase = try reader.readPurchase(payloadLength: sequence.length)
         purchases.append(purchase)
       case .shortVersion:

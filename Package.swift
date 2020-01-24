@@ -16,18 +16,18 @@ let package = Package(
   ],
   dependencies: [
     .package(
-      url: "https://github.com/industrialbinaries/OpenSSL",
-      .branch("feature/asn1")
+      url: "https://github.com/industrialbinaries/ASN1Decoder",
+      .branch("feature/doc")
     ),
   ],
   targets: [
     .target(
       name: "youda",
-      dependencies: ["OpenSSL"]
+      dependencies: ["ASN1Decoder"]
     ),
     .testTarget(
       name: "youdaTests",
-      dependencies: ["youda"]
+      dependencies: ["youda", "ASN1Decoder"]
     ),
   ]
 )

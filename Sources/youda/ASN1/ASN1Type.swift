@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ASPN1Type: Int {
+enum ASN1Type: Int {
 	// MARK: - Reciept
 
   case bundleId = 2
@@ -20,7 +20,7 @@ enum ASPN1Type: Int {
 
 	// MARK: - Purchase
 
-  case purchase = 17
+  case set = 17
   case purchaseQuantity = 1701
   case purchaseProductIdentifier = 1702
   case purchaseTransactionIdentifier = 1703

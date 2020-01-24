@@ -5,6 +5,7 @@
 //  MIT license, see LICENSE file for details
 //
 
+import ASN1Decoder
 import CryptoKit
 import Foundation
 
@@ -30,7 +31,7 @@ final class ReceiptService {
     let octets = sign?.pointee.contents.pointee.d.data
 
     let payloadASN1 = UnsafePointer(octets?.pointee.data)!
-    let reader = ASN1Reader(pointer: payloadASN1)
+    let reader = ASN1Decoder(pointer: payloadASN1)
     receipt = try reader.readReceipt(container: pkcs7)
     self.deviceID = deviceID
   }

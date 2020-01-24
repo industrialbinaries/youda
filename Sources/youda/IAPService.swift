@@ -19,9 +19,9 @@ public final class IAPService: NSObject {
   // MARK: - Public properties
 
   /// Available products from iTunesConnect, it is all products which you can buy from your app
-  public private(set) var availableProducts = [IAPProduct]()
+  public private(set) var availableProducts = [SKProduct]()
   /// Purchased products from available products
-  public var purchasedProducts: [IAPProduct] {
+  public var purchasedProducts: [SKProduct] {
     return availableProducts
       .filter { purchasedProductsIdentifiers.contains($0.productIdentifier) }
   }
@@ -79,8 +79,7 @@ extension IAPService: IAPServiceProtocol {
   /// - Parameter product: Product identifier for purchase
   public func buy(product productIdentifier: String) {
     guard let product = availableProducts
-      .first(where: { $0.productIdentifier == productIdentifier })?
-      .product else { return }
+      .first(where: { $0.productIdentifier == productIdentifier }) else { return }
     let payment = SKPayment(product: product)
     SKPaymentQueue.default().add(payment)
   }
@@ -97,7 +96,6 @@ extension IAPService: SKProductsRequestDelegate {
   public func productsRequest(_: SKProductsRequest, didReceive response: SKProductsResponse) {
     availableProducts = response
       .products
-      .map { IAPProduct(with: $0) }
   }
 
   public func requestDidFinish(_ request: SKRequest) {

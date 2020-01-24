@@ -27,7 +27,10 @@ enum IAPEnvironment {
   /// Default environment mean sandbox when you launch app from Xcode on your iPhone or production in case when you download app from AppStore, when you try app simulator, it will use `mock` environemnts
   case `default`
   /// Mock environment for debug app in simulator
-  case mock
+  /// - Parameters:
+  ///   - availableProducts: Array of mock products which will be return when you try bought product, in case it is nil will return default "Test product"
+  ///   - purchasedProducts: Array of purchased products
+  case mock(available: [IAPProduct]?, purchased: [IAPProduct]?)
 }
 
 extension IAPServiceProtocol {
@@ -37,15 +40,15 @@ extension IAPServiceProtocol {
   ///   - deviceID: Device ID for validate receipt hash
   ///   - environment: Environment of instance
   static func configureService(products: Set<String>, deviceID: UUID?, environment: IAPEnvironment = .default) -> IAPServiceProtocol {
-    #if targetEnvironment(simulator)
-      return IAPServiceMock()
-    #else
-      switch environment {
-      case .default:
-        return IAPService(products: products, deviceID: deviceID)
-      case .mock:
+    switch environment {
+    case .default:
+      #if targetEnvironment(simulator)
         return IAPServiceMock()
-      }
-    #endif
+      #else
+        return IAPService(products: products, deviceID: deviceID)
+      #endif
+    case let .mock(available: available, purchased: purchased):
+      return IAPServiceMock(availableProducts: available ?? [], purchasedProducts: purchased ?? [])
+    }
   }
 }

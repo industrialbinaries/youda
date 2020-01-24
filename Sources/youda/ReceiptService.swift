@@ -6,8 +6,11 @@
 //
 
 import ASN1Decoder
-import CryptoKit
 import Foundation
+// #if canImport(CryptoKit)
+#if os(iOS)
+  import CryptoKit
+#endif
 
 final class ReceiptService {
   /// Local receipt
@@ -38,7 +41,7 @@ final class ReceiptService {
 
   /// Verify Receipt SHA1 hash
   /// - Parameter receipt: receipt for verification
-  @available(iOS 13.0, *)
+  @available(macOS 10.15, iOS 13.0, *)
   public func verify(receipt: Receipt) throws {
     guard
       let opaque = receipt.opaque,
@@ -47,19 +50,24 @@ final class ReceiptService {
       var deviceID = deviceID?.uuid else {
       throw ReceiptError.unverifiable
     }
-    let deviceIDData = NSData(bytes: &deviceID, length: 16)
 
-    var sha1 = Insecure.SHA1()
-    sha1.update(data: deviceIDData)
-    sha1.update(data: opaque)
-    sha1.update(data: bundleID)
-    let digest = sha1.finalize()
+    #if os(iOS)
+      let deviceIDData = NSData(bytes: &deviceID, length: 16)
 
-    // Validate hash
+      var sha1 = Insecure.SHA1()
+      sha1.update(data: deviceIDData)
+      sha1.update(data: opaque)
+      sha1.update(data: bundleID)
+      let digest = sha1.finalize()
 
-    guard digest == (hash as Data) else {
-      // throw ReceiptError.unverifiable
-      return
-    }
+      // Validate hash
+
+      guard digest == (hash as Data) else {
+        // throw ReceiptError.unverifiable
+        return
+      }
+    #else
+      throw ReceiptError.unverifiable // In current version is macOS unsupported
+    #endif
   }
 }

@@ -8,13 +8,6 @@
 import Foundation
 import StoreKit
 
-extension Notification.Name {
-  /// Notification trigged when update bought products
-  public static var subscriptionChange: Notification.Name {
-    Notification.Name(rawValue: "co.industrial-binaries.youda.subscription-change")
-  }
-}
-
 public final class IAPService: NSObject {
   // MARK: - Public properties
 
@@ -22,7 +15,7 @@ public final class IAPService: NSObject {
   public private(set) var availableProducts = [SKProduct]()
   /// Purchased products from available products
   public var purchasedProducts: [SKProduct] {
-    return availableProducts
+    availableProducts
       .filter { purchasedProductsIdentifiers.contains($0.productIdentifier) }
   }
 
@@ -65,10 +58,10 @@ public final class IAPService: NSObject {
 
   private func addPurchasedProduct(identifier: String) {
     purchasedProductsIdentifiers.insert(identifier)
-    // Send notification to inform about change purchased products
+    // Send a notification to inform about changed purchased products
     NotificationCenter.default.post(name: .subscriptionChange, object: nil)
     // Call delegate with new purchased products
-    delegate?.didUpdate(purchasedProducts: purchasedProducts)
+    delegate?.didUpdate(self, purchasedProducts: purchasedProducts)
   }
 }
 

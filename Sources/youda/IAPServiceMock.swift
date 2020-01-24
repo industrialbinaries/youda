@@ -49,7 +49,7 @@ public final class IAPServiceMock: IAPServiceProtocol {
       // Send notification to inform about change purchased products
       NotificationCenter.default.post(name: .subscriptionChange, object: nil)
       // Call delegate with new purchased products
-      self.delegate?.didUpdate(purchasedProducts: self.purchasedProducts)
+      self.delegate?.didUpdate(self, purchasedProducts: self.purchasedProducts)
     }
   }
 

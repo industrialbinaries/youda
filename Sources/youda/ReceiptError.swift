@@ -8,6 +8,7 @@
 import Foundation
 
 enum ReceiptError: Error {
+  case missingReceipt
   case missingContainer
   case emptyReceiptContents
   case missingCertificate

@@ -131,9 +131,10 @@ extension IAPService: SKPaymentTransactionObserver {
 private extension IAPService {
   func loadReceipts() throws {
     let receiptService = try ReceiptService(deviceID: deviceID)
-    let receipt = receiptService?.receipt
+    try receiptService.verifyCertificate()
+    let receipt = receiptService.receipt
 
-    for receipt in receipt?.purchases ?? [] {
+    for receipt in receipt.purchases {
       if let identifier = receipt.productIdentifier,
         let expirationDate = receipt.subscriptionExpirationDate,
         expirationDate >= Date() {

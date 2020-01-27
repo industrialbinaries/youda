@@ -7,7 +7,6 @@
 
 import ASN1Decoder
 import Foundation
-// #if canImport(CryptoKit)
 #if os(iOS)
   import CryptoKit
 #endif
@@ -17,18 +16,19 @@ final class ReceiptService {
   let receipt: Receipt
   /// Device ID - on iOS it is `UIDevice.current.identifierForVendor`
   private let deviceID: UUID?
+  /// Receipt PKCS7 container
+  private let pkcs7: PKCS7Container
 
   /// Initialize new Receipt service and load current local `Receipt` from `pkcs7`
-  init?(deviceID: UUID?) throws {
-    guard let receiptASN1 = Data.receiptASN1 as NSData? else {
-      return nil
+  /// - Parameters:
+  ///   - deviceID: UUID of device, on iOS use  `UIDevice.current.identifierForVendor`
+  ///   - asn1: Receipt ASN1 data, in case you don't set this property service use data from `Bundle.main.appStoreReceiptURL`
+  init(deviceID: UUID?, asn1: Data? = nil) throws {
+    guard let receiptASN1 = (asn1 ?? Data.receiptASN1) as NSData? else {
+      throw ReceiptError.missingReceipt
     }
 
     let pkcs7 = try PKCS7Container(receiptASN1: receiptASN1)
-    let certificateService = CertificateService()
-    guard try certificateService.verify(container: pkcs7, with: .appleRoot) else {
-      throw ReceiptError.invalidCertificate
-    }
 
     let sign = pkcs7.data?.pointee.d.sign
     let octets = sign?.pointee.contents.pointee.d.data
@@ -36,7 +36,16 @@ final class ReceiptService {
     let payloadASN1 = UnsafePointer(octets?.pointee.data)!
     let reader = ASN1Decoder(pointer: payloadASN1)
     receipt = try reader.readReceipt(container: pkcs7)
+    self.pkcs7 = pkcs7
     self.deviceID = deviceID
+  }
+
+  /// Verify loaded pkcs7 with `Apple Inc. Root Certificate`, for this verification you must add certificate to app bundle from https://www.apple.com/certificateauthority/
+  public func verifyCertificate() throws {
+    let certificateService = CertificateService()
+    guard try certificateService.verify(container: pkcs7, with: .appleRoot) else {
+      throw ReceiptError.invalidCertificate
+    }
   }
 
   /// Verify Receipt SHA1 hash

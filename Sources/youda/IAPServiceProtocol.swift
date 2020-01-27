@@ -33,7 +33,7 @@ enum IAPEnvironment {
   case mock(available: [SKProduct], purchased: [SKProduct])
 }
 
-extension IAPServiceProtocol {
+extension IAPService {
   /// Initialize new instance of `IAPServiceProtocol` base on current environments
   /// - Parameters:
   ///   - products: Products for request from apple developer acount

@@ -41,16 +41,16 @@ extension ASN1Decoder {
       case .bundleId:
         var pointer = self.pointer
         bundleId = readString(&pointer, with: sequence.length)
-        bundleIdRawData = readData(&pointer, with: sequence.length)
+        bundleIdRawData = readData(&pointer, with: sequence.length) as NSData
       case .bundleVersion:
         var pointer = self.pointer
         bundleVersion = readString(&pointer, with: sequence.length)
       case .opaque:
         var pointer = self.pointer
-        opaque = readData(&pointer, with: sequence.length)
+        opaque = readData(&pointer, with: sequence.length) as NSData
       case .hash:
         var pointer = self.pointer
-        hash = readData(&pointer, with: sequence.length)
+        hash = readData(&pointer, with: sequence.length) as NSData
       case .createDate:
         var pointer = self.pointer
         creationDate = readDate(&pointer, length: sequence.length)

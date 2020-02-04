@@ -39,7 +39,7 @@ struct CertificateService {
     ) == 1
   }
 
-  private func load(certificate: Certificate) throws -> OpaquePointer {
+  private func load(certificate: Certificate) throws -> UnsafeMutablePointer<X509>? {
     /// * ... Load the Apple root certificate into b_X509 ... */
     guard
       let certificateURL = Bundle.main.url(

@@ -13,6 +13,7 @@ enum ReceiptError: Error {
   case emptyReceiptContents
   case missingCertificate
   case invalidCertificate
+  case invalidBundleID
   case invalidReceipt
   case invalidPurchase
   case unverifiable

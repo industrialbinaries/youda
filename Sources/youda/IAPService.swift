@@ -132,6 +132,7 @@ private extension IAPService {
   func loadReceipts() throws {
     let receiptService = try ReceiptService(deviceID: deviceID)
     try receiptService.verifyCertificate()
+    try receiptService.verifyBundleID()
     let receipt = receiptService.receipt
 
     for receipt in receipt.purchases {

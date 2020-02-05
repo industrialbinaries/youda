@@ -48,10 +48,24 @@ final class ReceiptService {
     }
   }
 
+  /// Verify Bundle ID in receipt with app Bundle ID
+  public func verifyBundleID() throws {
+    guard receipt.bundleId == Bundle.main.shortVersion else {
+      throw ReceiptError.invalidBundleID
+    }
+  }
+
+  /// Verify Bundle Version in receipt with app CFBundleVersion
+  public func verifyBundleVersion() throws {
+    guard receipt.bundleVersion == Bundle.main.bundleIdentifier else {
+      throw ReceiptError.invalidBundleID
+    }
+  }
+
   /// Verify Receipt SHA1 hash
   /// - Parameter receipt: receipt for verification
   @available(macOS 10.15, iOS 13.0, *)
-  public func verify(receipt: Receipt) throws {
+  public func verifyHash(receipt: Receipt) throws {
     guard
       let opaque = receipt.opaque,
       let bundleID = receipt.bundleIdRawData,
@@ -78,5 +92,11 @@ final class ReceiptService {
     #else
       throw ReceiptError.unverifiable // In current version is macOS unsupported
     #endif
+  }
+}
+
+private extension Bundle {
+  var shortVersion: String? {
+    return object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
   }
 }

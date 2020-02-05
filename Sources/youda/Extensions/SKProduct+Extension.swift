@@ -8,11 +8,11 @@
 import StoreKit
 
 extension SKProduct {
-  /// Create new `SKProduct` for mock or tests
+  /// Creates a new `SKProduct` with predefined parameters, usually used in tests.
   /// - Parameters:
-  ///   - productIdentifier: Your product identifier for example `co.industrial-binaries.test-pro-version`
-  ///   - price: Price of product, default value is `0.99`
-  ///   - priceLocale: Price local, default value is `en_US`
+  ///   - productIdentifier: Your product identifier for example `co.industrial-binaries.test-pro-version`.
+  ///   - price: Price of product, default value is `0.99`.
+  ///   - priceLocale: Price local, default value is `en_US`.
   public convenience init(
     productIdentifier: String,
     price: String = "0.99",
@@ -25,7 +25,7 @@ extension SKProduct {
   }
 
   /// The cost of the product formatted in the local currency.
-  /// - Parameter formatter: Formatter for format price, default value is currency formatter
+  /// - Parameter formatter: Formatter for format price, default value is currency formatter.
   public func localPrice(formatter priceFormatter: NumberFormatter? = nil) -> String? {
     let formatter = priceFormatter ?? .currency
     formatter.locale = priceLocale

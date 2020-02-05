@@ -8,7 +8,7 @@
 import Foundation
 
 extension Notification.Name {
-  /// Notification trigged when update bought products
+  /// The notification triggered when bought products are updated.
   public static var subscriptionChange: Notification.Name {
     Notification.Name(rawValue: "co.industrial-binaries.youda.subscription-change")
   }

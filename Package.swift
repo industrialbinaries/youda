@@ -18,7 +18,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/industrialbinaries/ASN1Decoder",
-      .branch("feature/doc")
+      .branch("master")
     ),
   ],
   targets: [

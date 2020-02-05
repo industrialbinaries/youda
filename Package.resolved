@@ -5,8 +5,8 @@
         "package": "ASN1Decoder",
         "repositoryURL": "https://github.com/industrialbinaries/ASN1Decoder",
         "state": {
-          "branch": "feature/doc",
-          "revision": "1f7db67dc738283b6ca3466561391b506bc45998",
+          "branch": "master",
+          "revision": "db24ad5525269a275531b595d88a4356ffed5419",
           "version": null
         }
       },

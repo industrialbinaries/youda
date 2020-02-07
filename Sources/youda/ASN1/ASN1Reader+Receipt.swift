@@ -14,10 +14,10 @@ extension ASN1Decoder {
   ) throws -> Receipt {
     // Prepare Receipt properties
     var bundleId: String?
-    var bundleIdRawData: NSData?
+    var bundleIdRawData: Data?
     var bundleVersion: String?
-    var opaque: NSData?
-    var hash: NSData?
+    var opaque: Data?
+    var hash: Data?
     var shortVersion: String?
     var expirationDate: Date?
     var creationDate: Date?
@@ -41,16 +41,16 @@ extension ASN1Decoder {
       case .bundleId:
         var pointer = self.pointer
         bundleId = readString(&pointer, with: sequence.length)
-        bundleIdRawData = readData(&pointer, with: sequence.length) as NSData
+        bundleIdRawData = readData(&pointer, with: sequence.length)
       case .bundleVersion:
         var pointer = self.pointer
         bundleVersion = readString(&pointer, with: sequence.length)
       case .opaque:
         var pointer = self.pointer
-        opaque = readData(&pointer, with: sequence.length) as NSData
+        opaque = readData(&pointer, with: sequence.length)
       case .hash:
         var pointer = self.pointer
-        hash = readData(&pointer, with: sequence.length) as NSData
+        hash = readData(&pointer, with: sequence.length)
       case .createDate:
         var pointer = self.pointer
         creationDate = readDate(&pointer, length: sequence.length)

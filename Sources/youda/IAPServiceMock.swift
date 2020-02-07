@@ -32,7 +32,14 @@ public final class IAPServiceMock: IAPServiceProtocol {
   /// Try buy new `product`, In test product will be bought and add to `availableProducts` after 2 seconds for simulate API delay
   /// - Parameter product: Product identifier for purchase
   public func buy(product productIdentifier: String) {
-    guard !purchasedProducts.contains(where: { $0.productIdentifier == productIdentifier }) else {
+    buy(product: productIdentifier, delay: 2)
+  }
+
+  func buy(product productIdentifier: String, delay: TimeInterval) {
+    let isPurchased = purchasedProducts.contains(where: {
+      $0.productIdentifier == productIdentifier
+    })
+    guard !isPurchased else {
       return // Maybe throw error when product was bought?
     }
 
@@ -45,7 +52,7 @@ public final class IAPServiceMock: IAPServiceProtocol {
     }
 
     // Delay 2 seconds
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
       // Send notification to inform about change purchased products
       NotificationCenter.default.post(name: .subscriptionChange, object: nil)
       // Call delegate with new purchased products
@@ -55,10 +62,14 @@ public final class IAPServiceMock: IAPServiceProtocol {
 
   /// Restore bought products, f.e. when you log in on new device or uninstall app
   public func restoreProducts() {
+    restoreProducts(delay: 2)
+  }
+
+  func restoreProducts(delay: TimeInterval) {
     purchasedProducts = availableProducts
 
     // Delay 2 seconds
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
       // Send notification to inform about change purchased products
       NotificationCenter.default.post(name: .subscriptionChange, object: nil)
       // Call delegate with new purchased products

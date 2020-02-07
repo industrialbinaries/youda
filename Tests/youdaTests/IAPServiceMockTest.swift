@@ -17,6 +17,7 @@ final class IAPServiceMockTest: XCTestCase {
     )
 
     XCTAssertEqual(apiService.availableProducts.first?.productIdentifier, .purchasedAvailableIdentifier)
+    XCTAssertEqual(apiService.availableProducts.count, 1)
   }
 
   func testPurchasedProducts() {
@@ -43,7 +44,7 @@ final class IAPServiceMockTest: XCTestCase {
       expectation.fulfill()
     }
 
-    apiService.buy(product: .purchasedAvailableIdentifier)
+    apiService.buy(product: .purchasedAvailableIdentifier, delay: 0)
 
     wait(for: [expectation], timeout: 5)
     XCTAssertEqual(apiService.purchasedProducts.first?.productIdentifier, .purchasedAvailableIdentifier)
@@ -64,13 +65,11 @@ final class IAPServiceMockTest: XCTestCase {
       expectation.fulfill()
     }
 
-    apiService.restoreProducts()
+    apiService.restoreProducts(delay: 0)
 
-    wait(for: [expectation], timeout: 5)
+    wait(for: [expectation], timeout: 1)
     XCTAssertEqual(apiService.purchasedProducts.first?.productIdentifier, .purchasedAvailableIdentifier)
   }
-
-  private var expectation: XCTestExpectation!
 
   func testBuyProductDelegate() {
     let apiService = IAPServiceMock(
@@ -78,11 +77,12 @@ final class IAPServiceMockTest: XCTestCase {
       purchasedProducts: []
     )
 
-    expectation = XCTestExpectation(description: "Buy products timeout")
-    apiService.delegate = self
-    apiService.buy(product: .purchasedAvailableIdentifier)
+    let expectation = XCTestExpectation(description: "Buy products timeout")
+    let delegate = IAPServiceMockDelecgateTest(didUpdate: expectation.fulfill)
+    apiService.delegate = delegate
+    apiService.buy(product: .purchasedAvailableIdentifier, delay: 0)
 
-    wait(for: [expectation], timeout: 5)
+    wait(for: [expectation], timeout: 1)
     XCTAssertEqual(apiService.purchasedProducts.first?.productIdentifier, .purchasedAvailableIdentifier)
   }
 
@@ -92,18 +92,25 @@ final class IAPServiceMockTest: XCTestCase {
       purchasedProducts: []
     )
 
-    expectation = XCTestExpectation(description: "Restore products timeout")
-    apiService.delegate = self
-    apiService.restoreProducts()
+    let expectation = XCTestExpectation(description: "Restore products timeout")
+    let delegate = IAPServiceMockDelecgateTest(didUpdate: expectation.fulfill)
+    apiService.delegate = delegate
+    apiService.restoreProducts(delay: 0)
 
-    wait(for: [expectation], timeout: 5)
+    wait(for: [expectation], timeout: 1)
     XCTAssertEqual(apiService.purchasedProducts.first?.productIdentifier, .purchasedAvailableIdentifier)
   }
 }
 
-extension IAPServiceMockTest: IAPServiceDelegate {
+private class IAPServiceMockDelecgateTest: IAPServiceDelegate {
+  private let didUpdate: () -> Void
+
+  init(didUpdate: @escaping () -> Void) {
+    self.didUpdate = didUpdate
+  }
+
   func didUpdate(_ iapService: IAPServiceProtocol, purchasedProducts: [SKProduct]) {
-    expectation.fulfill()
+    didUpdate()
   }
 }
 

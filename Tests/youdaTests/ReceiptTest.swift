@@ -26,15 +26,16 @@ class ReceiptTest: XCTestCase {
     XCTAssertEqual(receipt.purchases.first?.productIdentifier, .productIdentifier)
   }
 
-  // TODO: When swift package manager start support resources, uncomment add AppleRootInc certificate
-//    func testCertificateVerification() {
-//        XCTAssertNoThrow(try receiptService().verifyCertificate())
-//    }
+  // TODO: When swift package manager starts support resources, uncomment next function and add a AppleRootInc certificate
+  //    func testCertificateVerification() {
+  //        XCTAssertNoThrow(try receiptService().verifyCertificate())
+  //    }
 }
 
 private extension String {
+  /// Test bundle ID from the real AppStore receipt
   static let bundleId = "sk.jantimar.News.sk"
-
+  /// Test product identifier from the real AppStore receipt
   static let productIdentifier = "sk_pro_version"
 
   // TODO: When swift package manager start support resources, move this base64 to separete file

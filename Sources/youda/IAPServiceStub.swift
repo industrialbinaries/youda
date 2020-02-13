@@ -7,7 +7,7 @@
 
 import StoreKit
 
-public final class IAPServiceMock: IAPServiceProtocol {
+public final class IAPServiceStub: IAPServiceProtocol {
   // MARK: - Public properties
 
   /// Available products from iTunesConnect, it is all products which you can buy from your app
@@ -17,9 +17,9 @@ public final class IAPServiceMock: IAPServiceProtocol {
   /// IAP delegate for inform about purchase updates
   public weak var delegate: IAPServiceDelegate?
 
-  /// Initialize Mock IAP Service
+  /// Initialize Stub IAP Service
   /// - Parameters:
-  ///   - availableProducts: Array of mock products which will be return when you try bought product
+  ///   - availableProducts: Array of stub products which will be return when you try bought product
   ///   - purchasedProducts: Array of purchased products
   public init(
     availableProducts: [SKProduct] = [],
@@ -44,7 +44,7 @@ public final class IAPServiceMock: IAPServiceProtocol {
     }
 
     if let product = availableProducts
-      .first(where: { $0.productIdentifier == productIdentifier }) { // Is there prepared mock
+      .first(where: { $0.productIdentifier == productIdentifier }) { // Is there prepared stub
       purchasedProducts.append(product)
     } else {
       let product = SKProduct(productIdentifier: productIdentifier)

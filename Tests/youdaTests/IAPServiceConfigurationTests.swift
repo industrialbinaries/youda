@@ -10,14 +10,14 @@ import XCTest
 @testable import youda
 
 final class IAPServiceConfigurationTests: XCTestCase {
-  func testInitMockConfiguration() {
+  func testInitStubConfiguration() {
     let iapService = IAPService.configureService(
       products: [],
       deviceID: nil,
-      environment: .mock(available: [], purchased: [])
+      environment: .stub(available: [], purchased: [])
     )
 
-    XCTAssert(iapService is IAPServiceMock)
+    XCTAssert(iapService is IAPServiceStub)
   }
 
   func testInitDefauleConfiguration() {
@@ -28,7 +28,7 @@ final class IAPServiceConfigurationTests: XCTestCase {
     )
 
     #if targetEnvironment(simulator)
-      XCTAssert(iapService is IAPServiceMock)
+      XCTAssert(iapService is IAPServiceStub)
     #else
       XCTAssert(iapService is IAPService)
     #endif

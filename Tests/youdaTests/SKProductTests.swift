@@ -10,14 +10,14 @@ import XCTest
 @testable import youda
 
 final class SKProductTests: XCTestCase {
-  func testCreateMockProduct() {
-    let product: SKProduct = .mock
+  func testCreateStubProduct() {
+    let product: SKProduct = .stub
     XCTAssertEqual(product.productIdentifier, .productIdentifier)
     XCTAssertEqual(product.price.stringValue, .price)
   }
 
   func testLocalPriceProduct() {
-    let product: SKProduct = .mock
+    let product: SKProduct = .stub
     XCTAssertEqual(product.localPrice(), "$0.99")
 
     product.setValue(Locale.sk, forKey: "priceLocale") // Update local price to €
@@ -26,7 +26,7 @@ final class SKProductTests: XCTestCase {
 }
 
 private extension SKProduct {
-  static var mock: SKProduct {
+  static var stub: SKProduct {
     SKProduct(
       productIdentifier: .productIdentifier,
       price: .price,

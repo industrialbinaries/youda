@@ -9,10 +9,10 @@ import StoreKit
 import XCTest
 @testable import youda
 
-final class IAPServiceMockTest: XCTestCase {
+final class IAPServiceStubTest: XCTestCase {
   func testAvailableProducts() {
-    let apiService = IAPServiceMock(
-      availableProducts: .mockAvailableProducts,
+    let apiService = IAPServiceStub(
+      availableProducts: .stubAvailableProducts,
       purchasedProducts: []
     )
 
@@ -21,17 +21,17 @@ final class IAPServiceMockTest: XCTestCase {
   }
 
   func testPurchasedProducts() {
-    let apiService = IAPServiceMock(
+    let apiService = IAPServiceStub(
       availableProducts: [],
-      purchasedProducts: .mockPurchasedProducts
+      purchasedProducts: .stubPurchasedProducts
     )
 
     XCTAssertEqual(apiService.purchasedProducts.first?.productIdentifier, .purchasedProductIdentifier)
   }
 
   func testBuyProductNotification() {
-    let apiService = IAPServiceMock(
-      availableProducts: .mockAvailableProducts,
+    let apiService = IAPServiceStub(
+      availableProducts: .stubAvailableProducts,
       purchasedProducts: []
     )
 
@@ -51,8 +51,8 @@ final class IAPServiceMockTest: XCTestCase {
   }
 
   func testRestoreProductsNotification() {
-    let apiService = IAPServiceMock(
-      availableProducts: .mockAvailableProducts,
+    let apiService = IAPServiceStub(
+      availableProducts: .stubAvailableProducts,
       purchasedProducts: []
     )
 
@@ -72,13 +72,13 @@ final class IAPServiceMockTest: XCTestCase {
   }
 
   func testBuyProductDelegate() {
-    let apiService = IAPServiceMock(
-      availableProducts: .mockAvailableProducts,
+    let apiService = IAPServiceStub(
+      availableProducts: .stubAvailableProducts,
       purchasedProducts: []
     )
 
     let expectation = XCTestExpectation(description: "Buy products timeout")
-    let delegate = IAPServiceMockDelecgateTest(didUpdate: expectation.fulfill)
+    let delegate = IAPServiceStubDelecgateTest(didUpdate: expectation.fulfill)
     apiService.delegate = delegate
     apiService.buy(product: .purchasedAvailableIdentifier, delay: 0)
 
@@ -87,13 +87,13 @@ final class IAPServiceMockTest: XCTestCase {
   }
 
   func testRestoreProductsDelegate() {
-    let apiService = IAPServiceMock(
-      availableProducts: .mockAvailableProducts,
+    let apiService = IAPServiceStub(
+      availableProducts: .stubAvailableProducts,
       purchasedProducts: []
     )
 
     let expectation = XCTestExpectation(description: "Restore products timeout")
-    let delegate = IAPServiceMockDelecgateTest(didUpdate: expectation.fulfill)
+    let delegate = IAPServiceStubDelecgateTest(didUpdate: expectation.fulfill)
     apiService.delegate = delegate
     apiService.restoreProducts(delay: 0)
 
@@ -102,7 +102,7 @@ final class IAPServiceMockTest: XCTestCase {
   }
 }
 
-private class IAPServiceMockDelecgateTest: IAPServiceDelegate {
+private class IAPServiceStubDelecgateTest: IAPServiceDelegate {
   private let didUpdate: () -> Void
 
   init(didUpdate: @escaping () -> Void) {
@@ -115,13 +115,13 @@ private class IAPServiceMockDelecgateTest: IAPServiceDelegate {
 }
 
 private extension Sequence where Iterator.Element == SKProduct {
-  static var mockAvailableProducts: [SKProduct] {
+  static var stubAvailableProducts: [SKProduct] {
     return [
       SKProduct(productIdentifier: .purchasedAvailableIdentifier),
     ]
   }
 
-  static var mockPurchasedProducts: [SKProduct] {
+  static var stubPurchasedProducts: [SKProduct] {
     return [
       SKProduct(productIdentifier: .purchasedProductIdentifier),
     ]

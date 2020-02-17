@@ -50,15 +50,15 @@ final class ReceiptService {
 
   /// Verify Bundle ID in receipt with app Bundle ID
   public func verifyBundleID() throws {
-    guard receipt.bundleId == Bundle.main.shortVersion else {
+    guard receipt.bundleId == Bundle.main.bundleIdentifier else {
       throw ReceiptError.invalidBundleID
     }
   }
 
   /// Verify Bundle Version in receipt with app CFBundleVersion
   public func verifyBundleVersion() throws {
-    guard receipt.bundleVersion == Bundle.main.bundleIdentifier else {
-      throw ReceiptError.invalidBundleID
+    guard receipt.bundleVersion == Bundle.main.shortVersion else {
+      throw ReceiptError.invalidBundleVersion
     }
   }
 

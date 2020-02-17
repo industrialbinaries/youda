@@ -14,6 +14,7 @@ enum ReceiptError: Error {
   case missingCertificate
   case invalidCertificate
   case invalidBundleID
+  case invalidBundleVersion
   case invalidReceipt
   case invalidPurchase
   case unverifiable

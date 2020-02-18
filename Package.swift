@@ -7,6 +7,7 @@ let package = Package(
   name: "Youda",
   platforms: [
     .iOS(.v12),
+    .macOS(.v10_14),
   ],
   products: [
     .library(
@@ -17,7 +18,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/industrialbinaries/ASN1Decoder",
-      .branch("feature/doc")
+      .branch("master")
     ),
   ],
   targets: [

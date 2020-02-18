@@ -13,14 +13,14 @@ struct Receipt {
   var bundleId: String?
   /// Bundle ID - The app’s bundle identifier.
   /// Same like BundleID but in raw data from PKCS7
-  var bundleIdRawData: NSData?
+  var bundleIdRawData: Data?
   /// Bundle Version - The app’s version number.
   /// This corresponds to the value of CFBundleVersion (in iOS) or CFBundleShortVersionString (in macOS) in the Info.plist.
   var bundleVersion: String?
   /// Opaque - An opaque value used, with other data, to compute the SHA-1 hash during validation.
-  var opaque: NSData?
+  var opaque: Data?
   /// Hash - A SHA-1 hash, used to validate the receipt.
-  var hash: NSData?
+  var hash: Data?
   /// Original Application Version - This corresponds to the value of CFBundleVersion (in iOS) or CFBundleShortVersionString (in macOS)
   /// in the Info.plist file when the purchase was originally made. In the sandbox environment, the value of this field is always “1.0”.
   var shortVersion: String?

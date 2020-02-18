@@ -29,7 +29,6 @@ struct CertificateService {
     /// * The root certificate for chain-of-trust verification. */
     let x509Store = X509_STORE_new()
     X509_STORE_add_cert(x509Store, certificateData)
-//        OpenSSL_add_all_digests() // TODO: Fix later
 
     /// * Verify the signature. If the verification is correct, b_out will contain the PKCS #7 payload and rc will be 1. */
     // int rc = PKCS7_verify(p7, NULL, store, NULL, b_out, 0);
@@ -39,7 +38,7 @@ struct CertificateService {
     ) == 1
   }
 
-  private func load(certificate: Certificate) throws -> OpaquePointer {
+  private func load(certificate: Certificate) throws -> UnsafeMutablePointer<X509>? {
     /// * ... Load the Apple root certificate into b_X509 ... */
     guard
       let certificateURL = Bundle.main.url(

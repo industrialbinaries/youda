@@ -8,10 +8,13 @@
 import Foundation
 
 enum ReceiptError: Error {
+  case missingReceipt
   case missingContainer
   case emptyReceiptContents
   case missingCertificate
   case invalidCertificate
+  case invalidBundleID
+  case invalidBundleVersion
   case invalidReceipt
   case invalidPurchase
   case unverifiable

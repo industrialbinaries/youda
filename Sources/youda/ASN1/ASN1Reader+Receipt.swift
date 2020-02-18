@@ -14,10 +14,10 @@ extension ASN1Decoder {
   ) throws -> Receipt {
     // Prepare Receipt properties
     var bundleId: String?
-    var bundleIdRawData: NSData?
+    var bundleIdRawData: Data?
     var bundleVersion: String?
-    var opaque: NSData?
-    var hash: NSData?
+    var opaque: Data?
+    var hash: Data?
     var shortVersion: String?
     var expirationDate: Date?
     var creationDate: Date?

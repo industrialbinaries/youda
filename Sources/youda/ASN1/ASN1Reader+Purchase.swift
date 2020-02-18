@@ -36,7 +36,7 @@ extension ASN1Decoder {
       switch ASN1Type(rawValue: sequence.type) {
       case .purchaseQuantity:
         var pointer = self.pointer
-        quantity = readInteger(&pointer, with: sequence.length)
+        quantity = readInt(&pointer, with: sequence.length)
       case .purchaseProductIdentifier:
         var pointer = self.pointer
         productIdentifier = readString(&pointer, with: sequence.length)
@@ -57,13 +57,13 @@ extension ASN1Decoder {
         subscriptionExpirationDate = readDate(&pointer, length: sequence.length)
       case .purchaseSubscriptionIntroductoryPricePeriod:
         var pointer = self.pointer
-        subscriptionIntroductoryPricePeriod = readInteger(&pointer, with: sequence.length)
+        subscriptionIntroductoryPricePeriod = readInt(&pointer, with: sequence.length)
       case .purchaseCancellationDate:
         var pointer = self.pointer
         cancellationDate = readDate(&pointer, length: sequence.length)
       case .purchaseWebOrderLineItemID:
         var pointer = self.pointer
-        webOrderLineItemID = readInteger(&pointer, with: sequence.length)
+        webOrderLineItemID = readInt(&pointer, with: sequence.length)
       default:
         break
       }

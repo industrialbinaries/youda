@@ -24,16 +24,16 @@ public protocol IAPServiceProtocol {
 
 /// IAP youda environment
 enum IAPEnvironment {
-  /// Default environment mean sandbox when you launch app from Xcode on your iPhone or production in case when you download app from AppStore, when you try app simulator, it will use `mock` environemnts
+  /// Default environment mean sandbox when you launch app from Xcode on your iPhone or production in case when you download app from AppStore, when you try app simulator, it will use `stub` environemnts
   case `default`
-  /// Mock environment for debug app in simulator
+  /// Stub environment for debug app in simulator
   /// - Parameters:
-  ///   - availableProducts: Array of mock products which will be return when you try bought product, in case it is nil will return default "Test product"
+  ///   - availableProducts: Array of stub products which will be return when you try bought product, in case it is nil will return default "Test product"
   ///   - purchasedProducts: Array of purchased products
-  case mock(available: [SKProduct], purchased: [SKProduct])
+  case stub(available: [SKProduct], purchased: [SKProduct])
 }
 
-extension IAPServiceProtocol {
+extension IAPService {
   /// Initialize new instance of `IAPServiceProtocol` base on current environments
   /// - Parameters:
   ///   - products: Products for request from apple developer acount
@@ -43,12 +43,12 @@ extension IAPServiceProtocol {
     switch environment {
     case .default:
       #if targetEnvironment(simulator)
-        return IAPServiceMock()
+        return IAPServiceStub()
       #else
         return IAPService(products: products, deviceID: deviceID)
       #endif
-    case let .mock(available: available, purchased: purchased):
-      return IAPServiceMock(availableProducts: available, purchasedProducts: purchased)
+    case let .stub(available: available, purchased: purchased):
+      return IAPServiceStub(availableProducts: available, purchasedProducts: purchased)
     }
   }
 }
